@@ -3,10 +3,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Juno.Etc;
+using Juno.Interfaces;
+using Juno.Services;
 
 namespace Juno
 {
-    public class FunctionDetour <TOriginalClass, TTargetClass>
+    public class NonGenericFunctionDetour : IDetour
     {
         private readonly byte[] _detourBytes;
         
@@ -16,15 +18,26 @@ namespace Juno
         
         private readonly IntPtr _originalFunctionAddress;
         
-        public FunctionDetour(string originalFunction, string targetFunction)
+        public NonGenericFunctionDetour(IReflect originalClassType, IReflect targetClassType, string originalFunctionName, string targetFunctionName)
         {
+            // Ensure the operating system is valid
+            
+            ValidateOperatingSystem.Validate();
+            
+            // Ensure the arguments passed in are valid
+            
+            if (string.IsNullOrWhiteSpace(originalFunctionName) || string.IsNullOrWhiteSpace(targetFunctionName))
+            {
+                throw new ArgumentException("One or more of the arguments provided was invalid");
+            }
+            
             // Get the information about the original function
             
-            var originalFunctionInfo = typeof(TOriginalClass).GetMethod(originalFunction, BindingFlags.Instance | BindingFlags.Public);
+            var originalFunctionInfo = originalClassType.GetMethod(originalFunctionName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
             
             if (originalFunctionInfo is null)
             {
-                throw new ArgumentException($"No function called {originalFunction} was found in the class {typeof(TOriginalClass)}");
+                throw new ArgumentException($"No function called {originalFunctionName} was found in the class {originalClassType}");
             }
             
             // Ensure the function is JIT compiled
@@ -37,11 +50,11 @@ namespace Juno
             
             // Get the information about the target function
             
-            var targetFunctionInfo = typeof(TTargetClass).GetMethod(targetFunction, BindingFlags.Instance | BindingFlags.Public);
+            var targetFunctionInfo = targetClassType.GetMethod(targetFunctionName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
             
             if (targetFunctionInfo is null)
             {
-                throw new ArgumentException($"No function called {targetFunction} was found in the class {typeof(TTargetClass)}");
+                throw new ArgumentException($"No function called {targetFunctionName} was found in the class {targetClassType}");
             }
             
             // Ensure the function is JIT compiled
@@ -63,7 +76,7 @@ namespace Juno
             _originalBytes = new byte[shellcode.Length];
                 
             Marshal.Copy(_originalFunctionAddress, _originalBytes, 0, shellcode.Length);
-
+            
             // Save the bytes used to detour the original function to the target function
             
             _detourBytes = shellcode;

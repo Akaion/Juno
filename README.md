@@ -16,9 +16,7 @@ A Windows managed function detouring library written in C# that supports both x8
 
 * Both detoured and original classes must have the same layout of class variables if you wish to access them
 * Both detoured and orginal functions can not be inlined
-* Classes must be instanced before the detour is applied
 * Detoured functions must match the signature of the original function i.e same parameters and return type
-* Functions must be declared as public
 
 ----
 
@@ -29,6 +27,26 @@ A Windows managed function detouring library written in C# that supports both x8
 ----
 
 ### Useage
+
+You have the option of using one of two function detouring methods
+
+* GenericFunctionDetour
+* NonGenericFunctionDetour
+
+GenericFunctionDetour should be used when the class type is availible at compiletime.
+
+NonGenericFunctionDetour should be used when a type is only availible at runtime.
+
+Creating instances of these classes is as follows
+
+```csharp
+using Juno;
+
+var genericFunctionDetour = new GenericFunctionDetour<OriginalClass, TargetClass>("OriginalFunction", "TargetFunction");
+
+var nonGenericFunctionDetour = new NonGenericFunctionDetour(OriginalClassType, TargetClassType, "OriginalFunction", "TargetFunction");
+
+```
 
 #### Basic detour
 
@@ -55,7 +73,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new FunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
+        var functionDetour = new GenericFunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
         
         // Initialize a test class
         
@@ -109,7 +127,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new FunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
+        var functionDetour = new GenericFunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
         
         // Initialize a test class
         
@@ -163,7 +181,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new FunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
+        var functionDetour = new GenericFunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
         
         // Initialize a test class
         
@@ -221,7 +239,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new FunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
+        var functionDetour = new GenericFunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
         
         // Initialize a test class
         
