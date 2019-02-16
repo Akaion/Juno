@@ -33,9 +33,9 @@ You have the option of using one of two function detouring methods
 * GenericFunctionDetour
 * NonGenericFunctionDetour
 
-GenericFunctionDetour should be used when the class type is availible at compiletime.
+GenericFunctionDetour should be used when the class type is available at compiletime.
 
-NonGenericFunctionDetour should be used when a type is only availible at runtime.
+NonGenericFunctionDetour should be used when a type is only available at runtime.
 
 Creating instances of these classes is as follows
 

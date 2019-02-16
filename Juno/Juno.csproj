@@ -3,7 +3,10 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <PackageVersion>1.1.0</PackageVersion>
+        <PackageVersion>1.1.1</PackageVersion>
+        <Description>A Windows managed function detouring library written in C# that supports both x86 and x64 detours.</Description>
+        <RepositoryUrl>https://github.com/Akaion/Juno</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
 </Project>

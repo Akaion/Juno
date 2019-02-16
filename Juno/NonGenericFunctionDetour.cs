@@ -65,11 +65,13 @@ namespace Juno
             
             var targetFunctionAddress = targetFunctionInfo.MethodHandle.GetFunctionPointer();
             
-            var isProcessX64 = Environment.Is64BitProcess;
+            // Ensure the method signatures of the original and target function match
+            
+            Tools.ValidateMethodSignature(originalFunctionInfo, targetFunctionInfo);
             
             // Create shellcode to perform a function detour
             
-            var shellcode = isProcessX64 ? Shellcode.JumpToFunctionX64(targetFunctionAddress) : Shellcode.JumpToFunctionX86(targetFunctionAddress);
+            var shellcode = Environment.Is64BitProcess ? Shellcode.JumpToFunctionX64(targetFunctionAddress) : Shellcode.JumpToFunctionX86(targetFunctionAddress);
             
             // Save the bytes of the original function
             
