@@ -28,26 +28,6 @@ A Windows managed function detouring library written in C# that supports both x8
 
 ### Useage
 
-You have the option of using one of two function detouring methods
-
-* GenericFunctionDetour
-* NonGenericFunctionDetour
-
-GenericFunctionDetour should be used when the class type is available at compiletime.
-
-NonGenericFunctionDetour should be used when a type is only available at runtime.
-
-Creating instances of these classes is as follows
-
-```csharp
-using Juno;
-
-var genericFunctionDetour = new GenericFunctionDetour<OriginalClass, TargetClass>("OriginalFunction", "TargetFunction");
-
-var nonGenericFunctionDetour = new NonGenericFunctionDetour(OriginalClassType, TargetClassType, "OriginalFunction", "TargetFunction");
-
-```
-
 #### Basic detour
 
 ```csharp
@@ -73,7 +53,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new GenericFunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
+        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod", typeof(TestClass2), "TestMethod");
         
         // Initialize a test class
         
@@ -127,7 +107,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new GenericFunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
+        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod", typeof(TestClass2), "TestMethod");
         
         // Initialize a test class
         
@@ -181,7 +161,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new GenericFunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
+        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod", typeof(TestClass2), "TestMethod");
         
         // Initialize a test class
         
@@ -239,7 +219,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new GenericFunctionDetour<TestClass1, TestClass2>("TestMethod1", "TestMethod2");
+        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod", typeof(TestClass2), "TestMethod");
         
         // Initialize a test class
         
