@@ -22,7 +22,7 @@ namespace Juno.Tests
         }
     }
     
-    public class Tests
+    public class DetourTests
     {
         private readonly FunctionDetour _functionDetour;
         
@@ -32,7 +32,7 @@ namespace Juno.Tests
         
         private readonly int _testVariable2;
         
-        public Tests()
+        public DetourTests()
         {
             // Initialize a function detour instance
             
@@ -50,29 +50,6 @@ namespace Juno.Tests
         }
 
         [Fact]
-        public void TestDetourUsingMethodInfo()
-        {
-            var originalMethodInfo = typeof(TestClass1).GetMethod("TestMethod", BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
-
-            var targetMethodInfo = typeof(TestClass2).GetMethod("TestMethod", BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
-            // Initialize a function detour instance
-
-            var testDetour = new FunctionDetour(originalMethodInfo, targetMethodInfo);
-
-            // Initialize a test class
-
-            var testClass1 = new TestClass1();
-
-            Assert.Equal(3, testClass1.TestMethod(1, 2));
-
-            testDetour.AddDetour();
-
-            Assert.Equal(2, testClass1.TestMethod(1, 2));
-
-            testDetour.RemoveDetour();
-        }
-
-        [Fact]
         public void TestAddDetour()
         {
             // Add the detour
@@ -87,7 +64,29 @@ namespace Juno.Tests
         }
         
         [Fact]
-        public void TestRemoteDetour()
+        public void TestAddDetourWithMethodInfo()
+        {
+            var originalMethodInfo = typeof(TestClass1).GetMethod("TestMethod", BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public);
+
+            var targetMethodInfo = typeof(TestClass2).GetMethod("TestMethod", BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public);
+
+            // Initialise a function detour
+
+            var functionDetour = new FunctionDetour(originalMethodInfo, targetMethodInfo);
+            
+            // Initialize a test class
+
+            var testClass1 = new TestClass1();
+
+            functionDetour.AddDetour();
+
+            Assert.Equal(2, testClass1.TestMethod(1, 2));
+
+            functionDetour.RemoveDetour();
+        }
+
+        [Fact]
+        public void TestRemoveDetour()
         {
             // Add the detour
             

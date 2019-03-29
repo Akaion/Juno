@@ -233,7 +233,7 @@ public class Program
         
         functionDetour.AddDetour();
         
-        // This calls the detoured function TestClass2.TestMethod2 producing 8 to the console
+        // This calls the detoured function TestClass2.TestMethod2 producing 0 to the console
         
         testClass.TestMethod1();
         

@@ -16,15 +16,14 @@ namespace Juno
         
         private IntPtr _originalFunctionAddress;
 
-        /// <summary>
-        /// All a method to be detoured by passing in methodinfo, rather than name, so that
-        /// when multiple methods exist with the same name, we dont need to worry about that
-        /// </summary>
-        /// <param name="originalFunctionInfo">method info pointing to the function we want to replace</param>
-        /// <param name="targetFunctionInfo">method info pointing to the function to replace with</param>
         public FunctionDetour(MethodInfo originalFunctionInfo, MethodInfo targetFunctionInfo)
         {
-            this.InitialiseDetour(originalFunctionInfo, targetFunctionInfo);
+            if (originalFunctionInfo is null || targetFunctionInfo is null)
+            {
+                throw new ArgumentException("One or more of the arguments provided was invalid");
+            }
+
+            InitialiseDetour(originalFunctionInfo, targetFunctionInfo);
         }
 
         public FunctionDetour(IReflect originalClassType, string originalFunctionName, IReflect targetClassType, string targetFunctionName)
@@ -54,7 +53,7 @@ namespace Juno
                 throw new ArgumentException($"No function called {targetFunctionName} was found in the class {targetClassType}");
             }
 
-            this.InitialiseDetour(originalFunctionInfo, targetFunctionInfo);
+            InitialiseDetour(originalFunctionInfo, targetFunctionInfo);
         }
 
         private void InitialiseDetour(MethodInfo originalFunctionInfo, MethodInfo targetFunctionInfo)
@@ -63,41 +62,23 @@ namespace Juno
 
             ValidateOperatingSystem.Validate();
 
-            // Get the information about the original function
-
-            if (originalFunctionInfo is null)
-            {
-                throw new ArgumentException("originalFunctionInfo is null");
-            }
-
-            // Ensure the function is JIT compiled
+            // Ensure the functions are JIT compiled
 
             RuntimeHelpers.PrepareMethod(originalFunctionInfo.MethodHandle);
+
+            RuntimeHelpers.PrepareMethod(targetFunctionInfo.MethodHandle);
 
             // Get a pointer to the original function
 
             _originalFunctionAddress = originalFunctionInfo.MethodHandle.GetFunctionPointer();
 
-            // Get the information about the target function
-
-            if (targetFunctionInfo is null)
-            {
-                throw new ArgumentException("targetFunctionInfo is null");
-            }
-
-            // Ensure the function is JIT compiled
-
-            RuntimeHelpers.PrepareMethod(targetFunctionInfo.MethodHandle);
-
             // Get a pointer to the target function
 
             var targetFunctionAddress = targetFunctionInfo.MethodHandle.GetFunctionPointer();
 
-            var isProcessX64 = Environment.Is64BitProcess;
-
             // Create shellcode to perform a function detour
 
-            var shellcode = isProcessX64 ? Shellcode.JumpToFunctionX64(targetFunctionAddress) : Shellcode.JumpToFunctionX86(targetFunctionAddress);
+            var shellcode = Environment.Is64BitProcess ? Shellcode.JumpToFunctionX64(targetFunctionAddress) : Shellcode.JumpToFunctionX86(targetFunctionAddress);
 
             // Save the bytes of the original function
 
