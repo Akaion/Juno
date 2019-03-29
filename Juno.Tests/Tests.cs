@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Xunit;
 
@@ -47,7 +48,30 @@ namespace Juno.Tests
             
             _testVariable2 = 10;
         }
-        
+
+        [Fact]
+        public void TestDetourUsingMethodInfo()
+        {
+            var originalMethodInfo = typeof(TestClass1).GetMethod("TestMethod", BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+
+            var targetMethodInfo = typeof(TestClass2).GetMethod("TestMethod", BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+            // Initialize a function detour instance
+
+            var testDetour = new FunctionDetour(originalMethodInfo, targetMethodInfo);
+
+            // Initialize a test class
+
+            var testClass1 = new TestClass1();
+
+            Assert.Equal(3, testClass1.TestMethod(1, 2));
+
+            testDetour.AddDetour();
+
+            Assert.Equal(2, testClass1.TestMethod(1, 2));
+
+            testDetour.RemoveDetour();
+        }
+
         [Fact]
         public void TestAddDetour()
         {
