@@ -53,7 +53,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod", typeof(TestClass2), "TestMethod");
+        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod1", typeof(TestClass2), "TestMethod2");
         
         // Initialize a test class
         
@@ -107,7 +107,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod", typeof(TestClass2), "TestMethod");
+        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod1", typeof(TestClass2), "TestMethod2");
         
         // Initialize a test class
         
@@ -161,7 +161,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod", typeof(TestClass2), "TestMethod");
+        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod1", typeof(TestClass2), "TestMethod2");
         
         // Initialize a test class
         
@@ -219,7 +219,7 @@ public class Program
 {
     public static void Main()
     {
-        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod", typeof(TestClass2), "TestMethod");
+        var functionDetour = new FunctionDetour(typeof(TestClass1), "TestMethod1", typeof(TestClass2), "TestMethod2");
         
         // Initialize a test class
         

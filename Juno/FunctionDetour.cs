@@ -10,6 +10,12 @@ namespace Juno
 {
     public class FunctionDetour : IDetour
     {
+        private const BindingFlags MethodBindingFlags = BindingFlags.FlattenHierarchy | 
+            BindingFlags.Instance | 
+            BindingFlags.NonPublic | 
+            BindingFlags.Public | 
+            BindingFlags.Static;
+
         private byte[] _detourBytes;
         
         private byte[] _originalBytes;
@@ -18,9 +24,19 @@ namespace Juno
 
         public FunctionDetour(MethodInfo originalFunctionInfo, MethodInfo targetFunctionInfo)
         {
-            if (originalFunctionInfo is null || targetFunctionInfo is null)
+            if (originalFunctionInfo == null)
             {
-                throw new ArgumentException("One or more of the arguments provided was invalid");
+                throw new ArgumentNullException($"The parameter '{nameof(originalFunctionInfo)}' can't be null!");
+            }
+
+            if (targetFunctionInfo == null)
+            {
+                throw new ArgumentNullException($"The parameter '{nameof(targetFunctionInfo)}' can't be null!");
+            }
+
+            if (targetFunctionInfo.MethodImplementationFlags != MethodImplAttributes.NoInlining)
+            {
+                throw new InvalidOperationException($"The function {targetFunctionInfo.Name} must be decorated with the NoInlining attribute.");
             }
 
             InitialiseDetour(originalFunctionInfo, targetFunctionInfo);
@@ -30,27 +46,47 @@ namespace Juno
         {
             // Ensure the arguments passed in are valid
 
-            if (string.IsNullOrWhiteSpace(originalFunctionName) || string.IsNullOrWhiteSpace(targetFunctionName))
+            if (string.IsNullOrWhiteSpace(originalFunctionName))
             {
-                throw new ArgumentException("One or more of the arguments provided was invalid");
+                throw new ArgumentException($"The parameter '{nameof(originalFunctionName)}' can't be null / empty or whitespace!");
+            }
+
+            if (string.IsNullOrWhiteSpace(targetFunctionName))
+            {
+                throw new ArgumentException($"The parameter '{nameof(targetFunctionName)}' can't be null / empty or whitespace!");
+            }
+
+            if (originalClassType == null)
+            {
+                throw new ArgumentNullException($"The parameter '{nameof(originalClassType)}' can't be null!");
+            }
+
+            if (targetClassType == null)
+            {
+                throw new ArgumentNullException($"The parameter '{nameof(targetClassType)}' can't be null!");
             }
 
             // Get the information about the original function
 
-            var originalFunctionInfo = originalClassType.GetMethod(originalFunctionName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+            var originalFunctionInfo = originalClassType.GetMethod(originalFunctionName, MethodBindingFlags);
 
-            if (originalFunctionInfo is null)
+            if (originalFunctionInfo == null)
             {
-                throw new ArgumentException($"No function called {originalFunctionName} was found in the class {originalClassType}");
+                throw new InvalidOperationException($"Could not find function '{originalFunctionName}' in class {originalClassType}!");
             }
 
             // Get the information about the target function
 
-            var targetFunctionInfo = targetClassType.GetMethod(targetFunctionName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+            var targetFunctionInfo = targetClassType.GetMethod(targetFunctionName, MethodBindingFlags);
 
-            if (targetFunctionInfo is null)
+            if (targetFunctionInfo == null)
             {
-                throw new ArgumentException($"No function called {targetFunctionName} was found in the class {targetClassType}");
+                throw new InvalidOperationException($"Could not find function '{targetFunctionName}' in class {targetClassType}!");
+            }
+
+            if (targetFunctionInfo.MethodImplementationFlags != MethodImplAttributes.NoInlining)
+            {
+                throw new InvalidOperationException($"The function {targetFunctionName} must be decorated with the NoInlining attribute.");
             }
 
             InitialiseDetour(originalFunctionInfo, targetFunctionInfo);
