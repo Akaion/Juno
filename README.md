@@ -65,7 +65,7 @@ testClass.TestMethod1;
 
 ### Overloads
 
-The first of these allows you to use `MethodInfo` datatypes that represent the methods you wish to detour in lieu of a set of classes and method names.
+In lieu of providing a set of classes and method names, you can provide a set of `MethodInfo` datatypes.
 
 ```csharp
 var detour = new MethodDetour(MethodInfo1, MethodInfo2);
@@ -87,4 +87,4 @@ var detour = new MethodDetour(MethodInfo1, MethodInfo2);
 
 Pull requests are welcome. 
 
-For large changes, please open an issue first to discuss what you would like to add.
+For large changes, please open an issue first to discuss what you would like to contribute.
