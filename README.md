@@ -1,7 +1,5 @@
 # Juno
 
-[![Build status](https://ci.appveyor.com/api/projects/status/81cs42eqbvnfcumx?svg=true)](https://ci.appveyor.com/project/Akaion/juno)
-
 A Windows managed method detouring library that supports both x86 and x64 detours.
 
 ----
