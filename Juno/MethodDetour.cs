@@ -127,7 +127,7 @@ namespace Juno
             
             if (Environment.Is64BitProcess)
             {
-                // mov rax, jumpAddress
+                // mov rax, targetMethodAddress
                 
                 shellcode.AddRange(new byte[] {0x48, 0xB8});
                 
@@ -140,7 +140,7 @@ namespace Juno
 
             else
             {
-                // mov eax, jumpAddress
+                // mov eax, targetMethodAddress
                 
                 shellcode.Add(0xB8);
                 
