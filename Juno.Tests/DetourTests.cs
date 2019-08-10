@@ -21,7 +21,7 @@ namespace Juno.Tests
         }
     }
     
-    public class DetoursTests
+    public class DetourTests
     {
         private readonly MethodDetour _methodDetour;
 
@@ -31,7 +31,7 @@ namespace Juno.Tests
 
         private readonly int _testVariable2;
 
-        public DetoursTests()
+        public DetourTests()
         {
             _methodDetour = new MethodDetour<TestClass1, TestClass2>("TestMethod", "TestMethod");
             
@@ -39,7 +39,7 @@ namespace Juno.Tests
 
             _testVariable1 = 5;
 
-            _testVariable2 = 10;
+            _testVariable2 = 10;   
         }
 
         [Fact]

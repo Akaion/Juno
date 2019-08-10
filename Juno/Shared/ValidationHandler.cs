@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace Juno.Tools
+namespace Juno.Shared
 {
     internal static class ValidationHandler
     {

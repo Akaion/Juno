@@ -2,8 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <PackageVersion>1.3.0</PackageVersion>
-        <Title>Juno</Title>
+        <PackageVersion>1.3.1</PackageVersion>
         <Authors>Akaion</Authors>
         <Description>A Windows managed method detouring library that supports both x86 and x64 detours.</Description>
         <RepositoryUrl>https://github.com/Akaion/Juno</RepositoryUrl>
